@@ -1,16 +1,17 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
 }
 
 android {
     namespace 'dev.ranjan.androidnewlearnings'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "dev.ranjan.androidnewlearnings"
         minSdk 21
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -38,7 +39,24 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.room:room-ktx:2.4.3'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+
+    //Encrypted Shared Preference
+    implementation 'androidx.security:security-crypto-ktx:1.1.0-alpha04'
+
+    //SQLCipher
+    implementation "net.zetetic:android-database-sqlcipher:4.4.0"
+    implementation "androidx.sqlite:sqlite:2.2.0"
+
+//    def room_version = "2.4.3"
+//
+//    implementation "androidx.room:room-runtime:$room_version"
+//    annotationProcessor "androidx.room:room-compiler:$room_version"
+//    kapt "androidx.room:room-compiler:$room_version"
+//    implementation 'androidx.room:room-ktx:2.4.3'
+//    kapt "androidx.room:room-compiler:2.4.3"
+
 }
