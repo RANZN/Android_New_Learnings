@@ -1,4 +1,4 @@
-package dev.ranjan.androidnewlearnings.encrypted_storage.room
+package dev.ranjan.androidnewlearnings.model.local
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
