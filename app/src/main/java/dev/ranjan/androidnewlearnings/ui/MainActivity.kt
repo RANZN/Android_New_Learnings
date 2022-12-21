@@ -19,15 +19,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        viewModel.callSomeData().observe(this){
+        viewModel.callSomeData().observe(this) {
             Log.d("TAG", "onCreate: $it")
 
-            lifecycleScope.launch{
-                if(it.isNullOrEmpty().not()) {
+            lifecycleScope.launch {
+                if (it.isNullOrEmpty().not()) {
                     it[0].key?.let { key -> viewModel.deleteData(key) }
                 }
             }
         }
-
+        viewModel.doApiCall().observe(this){
+            Log.d("TAG", "onCreate: $it")
+        }
     }
 }

@@ -10,6 +10,6 @@ Here define the ViewModel instance things
  */
 val viewModelModule = module {
     viewModel {
-        TheViewModel(get())
+        TheViewModel(get(),get())
     }
 }
