@@ -10,10 +10,9 @@ Here define the creation of RoomDatabase and getting instance of Dao.
  */
 val databaseModule = module {
     single {
-//        val supportFactory = SupportFactory(SQLiteDatabase.getBytes("ranjan".toCharArray()))
         return@single Room.databaseBuilder(
             get<Context>(), EncryptedRoomDatabase::class.java, "RoomDatabase"
-        )/*  .openHelperFactory(supportFactory)*/.fallbackToDestructiveMigration().build()
+        ).fallbackToDestructiveMigration().build()
     }
 
     single {
