@@ -1,4 +1,4 @@
-package dev.ranjan.socialmedia.data
+package dev.ranjan.androidnewlearnings.data
 
 data class Response(
 	val response: List<ResponseItem?>? = null

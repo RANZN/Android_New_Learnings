@@ -2,15 +2,13 @@ package dev.ranjan.socialmedia.di
 
 import android.content.Context
 import androidx.room.Room
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import dev.ranjan.socialmedia.data.local.RoomDao
-import dev.ranjan.socialmedia.data.local.RoomDatabaseClass
+import dev.ranjan.androidnewlearnings.data.local.RoomDao
+import dev.ranjan.androidnewlearnings.data.local.RoomDatabaseClass
 import javax.inject.Singleton
 
 @Module

@@ -1,6 +1,6 @@
-package dev.ranjan.socialmedia.data.remote
+package dev.ranjan.androidnewlearnings.data.remote
 
-import dev.ranjan.socialmedia.data.ResponseItem
+import dev.ranjan.androidnewlearnings.data.ResponseItem
 import retrofit2.Response
 import retrofit2.http.GET
 

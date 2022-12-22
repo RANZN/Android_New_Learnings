@@ -1,4 +1,4 @@
-package dev.ranjan.socialmedia.common
+package dev.ranjan.androidnewlearnings.common
 
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
@@ -25,7 +25,12 @@ suspend fun <T> safeApiCall(apiToBeCalled: suspend () -> Response<T>): Flow<Reso
                 if (response.isSuccessful) {
                     emit(Resource.Success(data = response.body()!!, code = response.code()))
                 } else {
-                    emit(Resource.Error(errorMessage = "Something went wrong", code = response.code()))
+                    emit(
+                        Resource.Error(
+                            errorMessage = "Something went wrong",
+                            code = response.code()
+                        )
+                    )
                 }
             } catch (e: HttpException) {
                 emit(Resource.Error(e.message ?: "Something went wrong"))

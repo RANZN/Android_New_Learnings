@@ -1,8 +1,9 @@
-package dev.ranjan.socialmedia.data.local
+package dev.ranjan.androidnewlearnings.data.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import dev.ranjan.socialmedia.data.local.model.RoomEntity
+import dev.ranjan.androidnewlearnings.data.local.RoomDao
+import dev.ranjan.androidnewlearnings.data.local.model.RoomEntity
 
 @Database(entities = [RoomEntity::class], version = 1)
 abstract class RoomDatabaseClass : RoomDatabase() {

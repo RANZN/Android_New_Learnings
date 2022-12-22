@@ -1,13 +1,11 @@
-package dev.ranjan.socialmedia.data
+package dev.ranjan.androidnewlearnings.data
 
-import dev.ranjan.socialmedia.common.Resource
-import dev.ranjan.socialmedia.common.safeApiCall
-import dev.ranjan.socialmedia.data.local.RoomDao
-import dev.ranjan.socialmedia.data.remote.ApiService
+import dev.ranjan.androidnewlearnings.common.safeApiCall
+import dev.ranjan.androidnewlearnings.data.local.RoomDao
+import dev.ranjan.androidnewlearnings.data.remote.ApiService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
@@ -41,7 +39,7 @@ class Repository @Inject constructor(private val dao: RoomDao, private val apiSe
 
     suspend fun doApiCall() = safeApiCall { apiService.postApi() }
 
-    fun doSomethins(){
+    fun doSomethins() {
         CoroutineScope(Dispatchers.IO).launch {
             safeApiCall { apiService.postApi() }
         }

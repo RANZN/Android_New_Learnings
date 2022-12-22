@@ -1,4 +1,4 @@
-package dev.ranjan.socialmedia.data.local.model
+package dev.ranjan.androidnewlearnings.data.local.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

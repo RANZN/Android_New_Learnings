@@ -1,4 +1,4 @@
-package dev.ranjan.socialmedia.common
+package dev.ranjan.androidnewlearnings.common
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
