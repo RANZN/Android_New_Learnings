@@ -1,64 +1,61 @@
 package dev.ranjan.androidnewlearnings
 
 import android.os.Bundle
-import android.util.Log
+import android.view.View
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.activity.viewModels
-import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import dev.ranjan.androidnewlearnings.data.local.RoomDatabaseClass
-import kotlinx.coroutines.CoroutineScope
+import dev.ranjan.androidnewlearnings.common.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private val viewModel by viewModels<TheViewModel>()
-
-    @Inject
-    lateinit var database: RoomDatabaseClass
+    private val textView by lazy { findViewById<TextView>(R.id.textView) }
+    private val progressBar by lazy { findViewById<ProgressBar>(R.id.progress) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
-        CoroutineScope(Dispatchers.IO).launch {
-//            dao.insertData(roomEntity)
+/*        viewModel.successResponse.observe(this) {
+            textView.text = it.toString()
+            textView.setTextColor(resources.getColor(R.color.black))
+            Log.d("TAG", "Success: ${it.toString()}")
         }
-//
-//        dao.getData().observe(this) {
-//            Log.d("ranjan", "onCreate: $it")
-//        }
-
-//        viewModel.getFirstCount().observe(this){
-//            Log.d("ranjan", "firstCount: $it")
-//        }
-//
-//        viewModel.getSecondCount().observe(this){
-//            Log.d("ranjan", "secondCount: $it")
-//        }
-//
-//        viewModel.getMergedData().observe(this){
-//            Log.d("ranjan", "merged: $it")
-//        }
-
-        viewModel.getLiveData().observe(this){
-            Log.d("ranjan", "onCreate: $it")
+        viewModel.errorResponse.observe(this) {
+            textView.text = it.toString()
+            textView.setTextColor(resources.getColor(R.color.red))
+            Log.d("TAG", "Failure: ${it.toString()}")
         }
+        viewModel.loading.observe(this) {
+            if (it) progressBar.visibility = View.VISIBLE
+            else progressBar.visibility = View.GONE
+        }*/
 
-        viewModel.doAPiCall()
-
-        Log.d("TAG", "onCreate: ${this.getString(Data.MALE.gender)}")
+        lifecycleScope.launch {
+            viewModel.doApiCall().observe(this@MainActivity) {
+                progressBar.visibility = View.GONE
+                when (it) {
+                    is Resource.Success -> {
+                        textView.text = it.data.toString()
+                        textView.setTextColor(resources.getColor(R.color.black))
+                    }
+                    is Resource.Error -> {
+                        textView.text = "${it.message} ${it.code}"
+                        textView.setTextColor(resources.getColor(R.color.red))
+                    }
+                    is Resource.Loading -> {
+                        progressBar.visibility = View.VISIBLE
+                    }
+                }
+            }
+        }
     }
 }
-
-enum class Data(val id: Int,@StringRes val gender: Int) {
-    MALE(id = 1, R.string.male),
-    FEMALE(2, R.string.female),
-    TRANSGENDER(3, R.string.trans),
-    OTHER(id = 4, gender = R.string.other),
-}
-

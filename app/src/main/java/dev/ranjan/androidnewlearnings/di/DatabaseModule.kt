@@ -1,4 +1,4 @@
-package dev.ranjan.socialmedia.di
+package dev.ranjan.androidnewlearnings.di
 
 import android.content.Context
 import androidx.room.Room
@@ -21,22 +21,7 @@ class DatabaseModule {
     @Provides
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): RoomDatabaseClass {
-        return Room.databaseBuilder(
-            context, RoomDatabaseClass::class.java, "RoomDatabaseName"
-        )/*.addMigrations(migration)*/.fallbackToDestructiveMigration().build()
+        return RoomDatabaseClass.getDatabase(context)
     }
-    
-//    companion object {
-//        val migration = object : Migration(1, 2) {
-//            override fun migrate(database: SupportSQLiteDatabase) {
-//                database.execSQL("SELECT * FROM `tableName`")
-//            }
-//        }
-//        val migration2 = object : Migration(2, 3) {
-//            override fun migrate(database: SupportSQLiteDatabase) {
-//
-//            }
-//        }
-//    }
 
 }

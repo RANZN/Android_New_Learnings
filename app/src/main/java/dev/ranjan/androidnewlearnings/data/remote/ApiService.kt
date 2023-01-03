@@ -6,7 +6,7 @@ import retrofit2.http.GET
 
 interface ApiService {
 
-    @GET("credit/x/api/v1.0/dynamic/page/fields")
+    @GET("api/npm-covid-data/")
     suspend fun postApi(): Response<List<ResponseItem>>
 
 }

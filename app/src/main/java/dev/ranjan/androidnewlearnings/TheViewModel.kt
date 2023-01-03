@@ -1,89 +1,53 @@
 package dev.ranjan.androidnewlearnings
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
-import dev.ranjan.androidnewlearnings.common.Resource
+import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.ranjan.androidnewlearnings.common.asLiveData
 import dev.ranjan.androidnewlearnings.data.Repository
-import dev.ranjan.androidnewlearnings.data.local.RoomDao
-import dev.ranjan.androidnewlearnings.data.remote.ApiService
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class TheViewModel(
-    private val dao: RoomDao, private val repository: Repository, val apiService: ApiService
+@HiltViewModel
+class TheViewModel @Inject constructor(
+    private val repository: Repository
 ) : ViewModel() {
 
+/*    private val _successResponse = MutableLiveData<List<ResponseItem>?>()
+    val successResponse
+        get() = _successResponse.asLiveData()
 
-//    fun doApiCall() {
-//        viewModelScope.launch {
-////            Log.d("ranjan", "doApiCall: ${apiService.postApi()}")
-//        }
-//
-//        viewModelScope.launch(Dispatchers.IO) {
-//            dao.insertData(RoomEntity(1, 2, "Ranjan"))
-//        }
-//    }
+    private val _errorResponse = MutableLiveData<String?>()
+    val errorResponse
+        get() = _errorResponse.asLiveData()
 
-//
-//    fun getFirstCount(): LiveData<Int> = dao.getFirstCount()
-//
-//    fun getSecondCount(): LiveData<Int> = dao.getSecondCount()
+    private val _loading = MutableLiveData(false)
+    val loading
+        get() = _loading.asLiveData()
 
 
-//
-//    fun getMergedData(): LiveData<List<Int>> {
-//        val liveData1 = getFirstCount()
-//        val liveData2 = getSecondCount()
-//        val liveDataMerger: MediatorLiveData<Int> = MediatorLiveData<Int>()
-//        liveDataMerger.addSource(liveData1) {
-//            list.add(0, it)
-//            someLiveData.postValue(list)
-//            liveDataMerger.setValue(it)
-//        }
-//        liveDataMerger.addSource(liveData2) {
-//            list.add(1, it)
-//            someLiveData.postValue(list)
-//            liveDataMerger.setValue(it)
-//        }
-//        return someLiveData as LiveData<List<Int>>
-//    }
+    private val _response = MutableLiveData<Resource<List<ResponseItem>>>()
+    val response
+        get() = _response.asLiveData()
 
-
-    fun getLiveData() = repository.data.asLiveData()
-
-
-    fun doAPiCall() {
+    init {
         CoroutineScope(Dispatchers.IO).launch {
             repository.doApiCall().collect {
+                _loading.postValue(false)
                 when (it) {
                     is Resource.Success -> {
-                        Log.d("ranjan", "doAPiCall:  ${it.data}")
+                        _successResponse.postValue(it.data)
                     }
                     is Resource.Error -> {
-                        Log.d("ranjan", "error:  ${it.message}")
+                        _errorResponse.postValue(it.message)
                     }
                     is Resource.Loading -> {
-
+                        _loading.postValue(true)
                     }
                 }
             }
-
-
-            flow{
-                emit(1)
-                delay(10000)
-                emit(2)
-                delay(100)
-                emit(3)
-            }.collect{
-
-            }
         }
-    }
+    }*/
+
+    suspend fun doApiCall() = repository.doApiCall().asLiveData()
 
 
 }

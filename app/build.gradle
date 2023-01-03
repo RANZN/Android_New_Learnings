@@ -17,12 +17,25 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "X_API_KEY", X_RapidAPI_Key)
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            debuggable true
+            minifyEnabled true
+            shrinkResources true
+            manifestPlaceholders = [enableCrashlytics: true]
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "BASE_URL", BASE_URL
+        }
+        debug{
+            debuggable true
+            minifyEnabled false
+            shrinkResources false
+            manifestPlaceholders = [enableCrashlytics: false]
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "BASE_URL", BASE_URL_UAT
         }
     }
     compileOptions {
@@ -69,4 +82,7 @@ dependencies {
     kapt "androidx.room:room-compiler:$room_version"
     implementation 'androidx.room:room-ktx:2.4.3'
     kapt "androidx.room:room-compiler:2.4.3"
+
+    //Leak Canary
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.10'
 }

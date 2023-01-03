@@ -13,38 +13,8 @@ import javax.inject.Inject
 
 class Repository @Inject constructor(private val dao: RoomDao, private val apiService: ApiService) {
 
-    private val list = mutableListOf(0, 0)
-    val data: Flow<MutableList<Int>> = dao.getFirstCount().zip(dao.getSecondCount()) { f1, f2 ->
-        list[0] = f1
-        list[1] = f2
-        return@zip list
-    }
-
-    private fun getDataA(): Flow<List<Int>> {
-        return combine(
-            dao.getFirstCount(),
-            dao.getSecondCount(),
-            dao.getSecondCount(),
-            dao.getSecondCount(),
-            dao.getSecondCount(),
-        ) { f1, f2, f3, f4, f5 ->
-            list[0] = f1
-            list[1] = f2
-            list[2] = f3
-            list[3] = f4
-            return@combine list
-        }
-    }
-
 
     suspend fun doApiCall() = safeApiCall { apiService.postApi() }
-
-    fun doSomethins() {
-        CoroutineScope(Dispatchers.IO).launch {
-            safeApiCall { apiService.postApi() }
-        }
-    }
-
 
 }
 
