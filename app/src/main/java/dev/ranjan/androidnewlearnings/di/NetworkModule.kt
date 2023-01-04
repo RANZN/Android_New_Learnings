@@ -13,15 +13,14 @@ import dev.ranjan.androidnewlearnings.MainActivity
 import dev.ranjan.androidnewlearnings.common.TokenKey
 import dev.ranjan.androidnewlearnings.common.hasNetwork
 import dev.ranjan.androidnewlearnings.data.remote.ApiService
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import okhttp3.Cache
-import okhttp3.CacheControl
-import okhttp3.Interceptor
-import okhttp3.OkHttpClient
+import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -52,7 +51,8 @@ class NetworkModule {
         chuck: ChuckerInterceptor,
         @Named("custom_header") custom_header_Interceptor: Interceptor,
         @Named("caching") offlineInterceptor: Interceptor,
-        @ApplicationContext context: Context
+        @ApplicationContext context: Context,
+        authenticator: Authenticator
     ): OkHttpClient {
         val cacheSize = (15 * 1024 * 1024).toLong() //15MB
         val myCache = Cache(context.cacheDir, cacheSize)
@@ -61,6 +61,8 @@ class NetworkModule {
         if (BuildConfig.DEBUG) okhttp.addInterceptor(httpLoggingInterceptor).addInterceptor(chuck)
 
         okhttp/*.cache(myCache)*/.addNetworkInterceptor(custom_header_Interceptor)
+//            .authenticator(authenticator)
+
 //            .addInterceptor(offlineInterceptor)
 //            .connectTimeout(1, TimeUnit.MINUTES)
 //            .writeTimeout(30, TimeUnit.SECONDS)
@@ -109,7 +111,7 @@ class NetworkModule {
             when (response.code) {
                 401 -> { //Forbidden
                     //do api call
-                    val newResponse = runBlocking {
+                    val newResponse = runBlocking(Dispatchers.IO) {
                         val newTokenResponse = apiService.getRefreshToken()
                         tokenKey.TOKEN = newTokenResponse.body()?.accessToken.toString()
                         request.removeHeader("Authorization")
@@ -133,6 +135,9 @@ class NetworkModule {
 
         }
     }
+
+
+
 
     @Named("caching")
     @Provides
