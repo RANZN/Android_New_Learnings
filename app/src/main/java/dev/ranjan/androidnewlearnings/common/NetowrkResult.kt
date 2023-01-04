@@ -27,7 +27,7 @@ suspend fun <T> safeApiCall(apiToBeCalled: suspend () -> Response<T>): Flow<Reso
                 } else {
                     emit(
                         Resource.Error(
-                            errorMessage = "Something went wrong",
+                            errorMessage = response.errorBody()?.string().toString(),
                             code = response.code()
                         )
                     )
