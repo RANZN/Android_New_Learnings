@@ -16,8 +16,10 @@ interface ApiService {
 
     //    @Headers("content-type", "application/json")
     @POST("oauth/token")
-    @Headers("remove-content-type:false")
     suspend fun getToken(@Body body: RequestBody): Response<TokenResponse>
+
+    @POST("oauth/token/refreshToken")
+    suspend fun getRefreshToken(): Response<TokenResponse>
 
     @Headers("remove-content-type:true")
     @GET("market-cap?assetId=%20f1ff77b6-3ab4-4719-9ded-2fc7e71cff1f")

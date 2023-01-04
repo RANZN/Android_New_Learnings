@@ -1,7 +1,7 @@
 package dev.ranjan.androidnewlearnings.di
 
 import android.content.Context
-import android.util.Log
+import android.content.Intent
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import dagger.Module
 import dagger.Provides
@@ -9,8 +9,11 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dev.ranjan.androidnewlearnings.BuildConfig
+import dev.ranjan.androidnewlearnings.MainActivity
+import dev.ranjan.androidnewlearnings.common.TokenKey
 import dev.ranjan.androidnewlearnings.common.hasNetwork
 import dev.ranjan.androidnewlearnings.data.remote.ApiService
+import kotlinx.coroutines.runBlocking
 import okhttp3.Cache
 import okhttp3.CacheControl
 import okhttp3.Interceptor
@@ -84,34 +87,50 @@ class NetworkModule {
     @Named("custom_header")
     @Provides
     fun provideCustomInterceptor(
+        apiService: ApiService, tokenKey: TokenKey, @ApplicationContext context: Context
     ): Interceptor {
         return Interceptor { chain: Interceptor.Chain ->
             val original = chain.request()
 
             val shouldRemoveContentType = original.headers["remove-content-type"] == "true"
 
-            val request =
-                original.newBuilder()
-                    .addHeader("content-type", "application/json")
-                    .addHeader("X-RapidAPI-Key", BuildConfig.X_API_KEY)
-                    .addHeader("X-RapidAPI-Host", "bravenewcoin.p.rapidapi.com")
+            val request = original.newBuilder().addHeader("content-type", "application/json")
+                .addHeader("X-RapidAPI-Key", BuildConfig.X_API_KEY)
+                .addHeader("X-RapidAPI-Host", "bravenewcoin.p.rapidapi.com").addHeader(
+                    "Authorization", "Bearer ${tokenKey.TOKEN}"
+                ) //assuming tokenKey as a preference helper to save key
 
-            if(shouldRemoveContentType) {
+            if (shouldRemoveContentType) {
                 request.removeHeader("content-type")
                 request.removeHeader("remove-content-type")
             }
 
-//            val response = chain.proceed(request.build())
-//            var msg = when (response.code) {
-//                403 -> {
-//                    "Unauthorized ${response.message}"
-//                }
-//                else -> {
-//                    response.message
-//                }
-//            }
-//            Log.d("TAG", "provideCustomInterceptor: $msg")
-            chain.proceed(request.build())
+            val response = chain.proceed(request.build())
+            when (response.code) {
+                401 -> { //Forbidden
+                    //do api call
+                    val newResponse = runBlocking {
+                        val newTokenResponse = apiService.getRefreshToken()
+                        tokenKey.TOKEN = newTokenResponse.body()?.accessToken.toString()
+                        request.removeHeader("Authorization")
+                            .addHeader("Authorization", "Bearer ${tokenKey.TOKEN}")
+                    }
+                    return@Interceptor chain.proceed(newResponse.build())
+                }
+                404/*NotFound */,
+                403/*Bad Request*/ -> {
+                    //assuming 403 & 404 is response for sign-out to the user.
+                    val intent = Intent(context, MainActivity::class.java)
+                    tokenKey.TOKEN = "" //clearing the token from preference
+                    context.startActivity(intent) //logging off for user.
+
+                    return@Interceptor response
+                }
+                else -> {
+                    return@Interceptor response
+                }
+            }
+
         }
     }
 
@@ -132,8 +151,7 @@ class NetworkModule {
 
             val forOffline = cacheControl/*.onlyIfCached()*/.maxStale(1, TimeUnit.DAYS).build()
             request = request.newBuilder().header(
-                "Cache-Control",
-                (if (context.hasNetwork()) forNetwork else forOffline).toString()
+                "Cache-Control", (if (context.hasNetwork()) forNetwork else forOffline).toString()
             ).build()
 
             chain.proceed(request)
