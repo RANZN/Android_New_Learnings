@@ -42,7 +42,30 @@ fun Context.hasNetwork(): Boolean {
             else -> false
         }
     } else {
-        @Suppress("DEPRECATION")
-        return connectivityManager.activeNetworkInfo?.isConnected ?: false
+        @Suppress("DEPRECATION") return connectivityManager.activeNetworkInfo?.isConnected ?: false
     }
+}
+
+fun Context.isConnectedToNetwork(): Internet {
+    val connectivityManager =
+        this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        val network = connectivityManager.activeNetwork ?: return Internet.NOT_CONNECTED
+        val networkCapabilities =
+            connectivityManager.getNetworkCapabilities(network) ?: return Internet.NOT_CONNECTED
+        if (networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)) {
+            // phone is connected to a network with internet access
+            Internet.CONNECTED
+        } else {
+            // phone is connected to a network but does not have internet access
+            Internet.CONNECTED_WITH_NO_INTERNET
+        }
+    } else {
+        @Suppress("DEPRECATION")
+        if (connectivityManager.activeNetworkInfo?.isConnected == true) Internet.CONNECTED else Internet.NOT_CONNECTED
+    }
+}
+
+enum class Internet {
+    CONNECTED, NOT_CONNECTED, CONNECTED_WITH_NO_INTERNET
 }
