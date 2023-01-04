@@ -1,6 +1,7 @@
 package dev.ranjan.androidnewlearnings.di
 
 import android.content.Context
+import android.util.Log
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import dagger.Module
 import dagger.Provides
@@ -56,11 +57,11 @@ class NetworkModule {
         val okhttp = OkHttpClient.Builder()
         if (BuildConfig.DEBUG) okhttp.addInterceptor(httpLoggingInterceptor).addInterceptor(chuck)
 
-        okhttp.cache(myCache).addNetworkInterceptor(custom_header_Interceptor)
-            .addInterceptor(offlineInterceptor)
-            .connectTimeout(1, TimeUnit.MINUTES)
-            .writeTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(15, TimeUnit.SECONDS)
+        okhttp/*.cache(myCache)*/.addNetworkInterceptor(custom_header_Interceptor)
+//            .addInterceptor(offlineInterceptor)
+//            .connectTimeout(1, TimeUnit.MINUTES)
+//            .writeTimeout(30, TimeUnit.SECONDS)
+//            .readTimeout(15, TimeUnit.SECONDS)
 
         return okhttp.build()
     }
@@ -87,13 +88,29 @@ class NetworkModule {
         return Interceptor { chain: Interceptor.Chain ->
             val original = chain.request()
 
-            val request =
-                original.newBuilder().addHeader("X-RapidAPI-Key", BuildConfig.X_API_KEY)
-                    .addHeader(
-                        "X-RapidAPI-Host",
-                        "vaccovid-coronavirus-vaccine-and-treatment-tracker.p.rapidapi.com"
-                    )
+            val shouldRemoveContentType = original.headers["remove-content-type"] == "true"
 
+            val request =
+                original.newBuilder()
+                    .addHeader("content-type", "application/json")
+                    .addHeader("X-RapidAPI-Key", BuildConfig.X_API_KEY)
+                    .addHeader("X-RapidAPI-Host", "bravenewcoin.p.rapidapi.com")
+
+            if(shouldRemoveContentType) {
+                request.removeHeader("content-type")
+                request.removeHeader("remove-content-type")
+            }
+
+//            val response = chain.proceed(request.build())
+//            var msg = when (response.code) {
+//                403 -> {
+//                    "Unauthorized ${response.message}"
+//                }
+//                else -> {
+//                    response.message
+//                }
+//            }
+//            Log.d("TAG", "provideCustomInterceptor: $msg")
             chain.proceed(request.build())
         }
     }
@@ -106,7 +123,7 @@ class NetworkModule {
 
             //TODO("Clear these later--> maxAge, maxStale, onlyIfCached()")
             val cacheControl = CacheControl.Builder()
-            val forNetwork = cacheControl.maxAge(60, TimeUnit.SECONDS).build()
+            val forNetwork = cacheControl.maxAge(0, TimeUnit.SECONDS).build()
 
             /**
              * maxAge-> Time after which network call will be done
