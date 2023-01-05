@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Android New Learnings</string>
+    <string name="male">MALE</string>
+    <string name="female">FEMALE</string>
+    <string name="trans">TRANS</string>
+    <string name="other">OTHER</string>
 </resources>
