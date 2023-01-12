@@ -1,5 +1,6 @@
 package dev.ranjan.androidnewlearnings
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -13,7 +14,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
-        val database = EncryptedRoomDatabase.buildDatabase("ranjan", this)
+        val database = EncryptedRoomDatabase.buildDatabase(BuildConfig.password, this)
         val dao = database.getDao()
 
         CoroutineScope(Dispatchers.IO).launch {
