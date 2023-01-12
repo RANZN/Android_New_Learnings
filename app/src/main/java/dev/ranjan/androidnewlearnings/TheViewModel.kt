@@ -2,6 +2,7 @@ package dev.ranjan.androidnewlearnings
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.ranjan.androidnewlearnings.common.Resource
 import dev.ranjan.androidnewlearnings.common.asLiveData
 import dev.ranjan.androidnewlearnings.data.Repository
@@ -12,8 +13,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class TheViewModel(
+@HiltViewModel
+class TheViewModel @Inject constructor(
     private val dao: RoomDao, private val repository: Repository, val apiService: ApiService
 ) : ViewModel() {
 
