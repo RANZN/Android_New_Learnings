@@ -1,4 +1,4 @@
-package dev.ranjan.socialmedia.di
+package dev.ranjan.androidnewlearnings.di
 
 import android.content.Context
 import androidx.room.Room

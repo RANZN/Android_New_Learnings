@@ -1,4 +1,4 @@
-package dev.ranjan.socialmedia.di
+package dev.ranjan.androidnewlearnings.di
 
 import dagger.Module
 import dagger.hilt.InstallIn
