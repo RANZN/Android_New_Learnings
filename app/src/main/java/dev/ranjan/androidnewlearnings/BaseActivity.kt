@@ -2,7 +2,6 @@ package dev.ranjan.androidnewlearnings
 
 import android.content.Intent
 import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import kotlinx.coroutines.*
@@ -53,10 +52,14 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     private fun logoutOperation() {
-        val intent = Intent(this@BaseActivity, LoginActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        val intent = Intent(this@BaseActivity, LoginActivity::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            putExtra("logout",true)
+        }
         startActivity(intent)
-        Toast.makeText(this@BaseActivity, "User Logout", Toast.LENGTH_SHORT).show()
+//        (application as App).showDialog()
+
+
     }
 }
