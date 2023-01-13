@@ -11,20 +11,15 @@ class LoginActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        stopTimer()
+        autoLogoutAction()
         binding.btn.setOnClickListener {
             val intent = Intent(this, DashboardActivity::class.java)
             startActivity(intent)
             finishAffinity()
         }
     }
-
-    override fun onResume() {
-        super.onResume()
-        showDialog()
-    }
-
-    private fun showDialog() {
+    private fun autoLogoutAction() {
+        stopTimer()
         val flag = intent.getBooleanExtra("logout", false)
         if (flag) {
             MaterialAlertDialogBuilder(this@LoginActivity).setCancelable(false)
