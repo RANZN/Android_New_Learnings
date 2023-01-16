@@ -16,6 +16,8 @@ fun <T> MutableLiveData<T>.asLiveData(): LiveData<T> {
     return this
 }
 
+//* Never Use this method it does memory leaks.
+/*
 fun <T> Flow<T>.asLiveData(): LiveData<T> {
     val liveData = MutableLiveData<T>()
     CoroutineScope(Dispatchers.IO).launch {
@@ -25,6 +27,7 @@ fun <T> Flow<T>.asLiveData(): LiveData<T> {
     }
     return liveData.asLiveData()
 }
+*/
 
 fun Context.hasNetwork(): Boolean {
     val connectivityManager =
