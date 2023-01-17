@@ -1,7 +1,6 @@
 package dev.ranjan.androidnewlearnings
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,8 +9,8 @@ import dev.ranjan.androidnewlearnings.common.Resource
 import dev.ranjan.androidnewlearnings.common.asLiveData
 import dev.ranjan.androidnewlearnings.data.Repository
 import dev.ranjan.androidnewlearnings.data.remote.ApiService
+import dev.ranjan.androidnewlearnings.common.ProgressCallback
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -28,16 +27,9 @@ class TheViewModel @Inject constructor(
         }
     }
 
-    private val _response = MutableLiveData<Resource<String>>()
-    val response get() = _response.asLiveData()
-    fun sendData(file: File) {
+    fun sendData(file: File, callback: ProgressCallback) {
         viewModelScope.launch(Dispatchers.IO) {
-            val result: Flow<Resource<String>> = repository.doApiCall(file)
-            withContext(Dispatchers.Main) {
-                result.collect {
-                    _response.postValue(it)
-                }
-            }
+            repository.doApiCall(file, callback)
         }
     }
 

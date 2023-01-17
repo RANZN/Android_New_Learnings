@@ -40,6 +40,7 @@ object UriUtils {
                 }
             } else if (isDownloadsDocument(uri)) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    val id: String
                     var cursor: Cursor? = null
                     try {
                         cursor = context.contentResolver.query(
@@ -56,7 +57,7 @@ object UriUtils {
                     } finally {
                         cursor?.close()
                     }
-                    val id = DocumentsContract.getDocumentId(uri)
+                    id = DocumentsContract.getDocumentId(uri)
                     if (!TextUtils.isEmpty(id)) {
                         if (id.startsWith("raw:")) {
                             return id.replaceFirst("raw:".toRegex(), "")
@@ -106,6 +107,8 @@ object UriUtils {
                     contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
                 } else if ("audio" == type) {
                     contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+                } else {
+                    contentUri = MediaStore.Files.getContentUri("external")
                 }
                 selection = "_id=?"
                 selectionArgs = arrayOf(split[1])

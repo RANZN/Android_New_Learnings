@@ -17,6 +17,8 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField "String", "BASE_URL", BASE_URL_DEVICE
+
     }
 
     buildTypes {
@@ -26,7 +28,6 @@ android {
             shrinkResources true
             manifestPlaceholders = [enableCrashlytics: true]
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "BASE_URL", BASE_URL_DEVICE
         }
         debug{
             debuggable true
@@ -34,7 +35,6 @@ android {
             shrinkResources false
             manifestPlaceholders = [enableCrashlytics: false]
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "BASE_URL", BASE_URL_DEVICE
         }
     }
     compileOptions {
