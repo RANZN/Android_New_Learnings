@@ -68,6 +68,11 @@ class MainActivity : AppCompatActivity(), ProgressCallback {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val fileUri = result.data?.data
+                /*val parcelFileDescriptor = contentResolver.openFilveDescriptor(fileUri!!, "r", null)
+               val inputStream = FileInputStream(parcelFileDescriptor?.fileDescriptor)
+               val file = File(cacheDir, getFileName(fileUri))
+               val outputStream = FileOutputStream(file)
+               inputStream.copyTo(outputStream)*/
                 val filePath = UriUtils.getPathFromUri(this, fileUri!!)
                 Log.d(TAG, "file: $filePath")
                 val file = File(filePath.toString())
@@ -75,15 +80,18 @@ class MainActivity : AppCompatActivity(), ProgressCallback {
             }
         }
 
-    override fun onProgress(progress: Long) {
+    override fun onProgress(progress: Long, total: Long) {
         progressBar.visibility = View.VISIBLE
         progressBar.progress = progress.toInt()
-        progressBarText.text = "$progress %"
+        progressBarText.text = "$progress / $total bytes"
     }
 
     override fun onSuccess(file: String) {
+        progressBar.visibility = View.GONE
+        progressBarText.visibility = View.GONE
         textView.setTextColor(resources.getColor(R.color.black))
         textView.text = file
+        progressBarText.text = "Uploaded"
     }
 
     override fun onError(error: String, responseCode: Int?) {

@@ -2,7 +2,6 @@ package dev.ranjan.androidnewlearnings.common
 
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType
@@ -13,7 +12,7 @@ import java.io.File
 import java.io.FileInputStream
 
 interface ProgressCallback {
-    fun onProgress(progress: Long)
+    fun onProgress(uploaded: Long, total: Long)
     fun onSuccess(file: String)
     fun onError(error: String, responseCode: Int?)
 }
@@ -35,8 +34,7 @@ internal class ProgressRequestBody(
             val handler = Handler(Looper.getMainLooper())
             while (fis.read(buffer).also { read = it } != -1) {
                 handler.post {
-                    val value = 100 * uploaded / total
-                    callback.onProgress(value)
+                    callback.onProgress(uploaded / 1024, total / 1024)
                 }
                 uploaded += read.toLong()
                 sink.write(buffer, 0, read)
@@ -65,7 +63,9 @@ suspend fun <T> uploadData(
                 }
             }
         } catch (e: Exception) {
-            callback.onError(e.message.toString(), null)
+            withContext(Dispatchers.Main) {
+                callback.onError(e.message.toString(), null)
+            }
         }
     }
 }
