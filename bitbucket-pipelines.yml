@@ -1,0 +1,9 @@
+
+image: androidsdk/android-30
+
+pipelines:
+  default:
+    - step:
+        name: Android Debug Application
+        script:
+          - ./gradlew assembleDebug
