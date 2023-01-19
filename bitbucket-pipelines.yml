@@ -29,4 +29,4 @@ pipelines:
         caches:
           - gradle
         script:
-          - ./gradlew :feature:testDebugUnitTest
+          - ./gradlew :app:testDebugUnitTest
