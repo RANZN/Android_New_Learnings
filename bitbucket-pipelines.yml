@@ -10,6 +10,7 @@ pipelines:
         script:
           - ./gradlew assembleDebug
           - ./gradlew lint
+          - ./gradlew testDebugUnitTest
         artifacts:
           - app/build/outputs/**
           - app/build/reports/**
