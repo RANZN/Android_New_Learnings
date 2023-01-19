@@ -1,16 +1,45 @@
 
 image: androidsdk/android-30
 
+# Runs sequently
+#pipelines:
+#  default:
+#    - step:
+#        name: Android Debug Application
+#        caches:
+#          - gradle
+#        script:
+#          - ./gradlew assembleDebug
+#          - ./gradlew lint
+#          - ./gradlew testDebugUnitTest
+#        artifacts:
+#          - app/build/outputs/**
+#          - app/build/reports/**
+
+
+
 pipelines:
   default:
-    - step:
-        name: Android Debug Application
-        caches:
-          - gradle
-        script:
-          - ./gradlew assembleDebug
-          - ./gradlew lint
-          - ./gradlew testDebugUnitTest
-        artifacts:
-          - app/build/outputs/**
-          - app/build/reports/**
+    - parallel:
+        - step:
+            name: Android Debug Application
+            caches:
+              - gradle
+            script:
+              - ./gradlew assembleDebug
+            artifacts:
+              - app/build/outputs/**
+        - step:
+            name: Lint
+            caches:
+              - gradle
+            script:
+              - ./gradlew lint
+            artifacts:
+              - app/build/reports/**
+        - step:
+            name: Debug Unit Test
+            caches:
+              - gradle
+            script:
+              - ./gradlew testDebugUnitTestimage: androidsdk/android-30
