@@ -9,3 +9,5 @@ pipelines:
           - gradle
         script:
           - ./gradlew assembleDebug
+        artifacts:
+          - app/build/outputs/**
