@@ -1,0 +1,44 @@
+image: androidsdk/android-30
+
+pipelines:
+  default:
+    - step:
+        name: Android Debug Application
+        caches:
+          - gradle
+        script:
+          - ./gradlew assembleDebug
+        artifacts:
+          - app/build/outputs/**
+    - parallel:
+        - step:
+            name: Lint
+            caches:
+              - gradle
+            script:
+              - ./gradlew lint
+            artifacts:
+              - app/build/reports/**
+        - step:
+            name: App Unit Test
+            caches:
+              - gradle
+            script:
+              - ./gradlew :app:testDebugUnitTest
+        - step:
+            name: Feature Unit Test
+            caches:
+              - gradle
+            script:
+              - ./gradlew :app:testDebugUnitTest
+    branches:
+      pipeline:
+        - step:
+            name: Pipeline Lint
+            caches:
+              - gradle
+            script:
+              - ./gradlew lint
+            artifacts:
+              - app/build/reports/**
+
