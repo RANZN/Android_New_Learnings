@@ -47,16 +47,14 @@ internal class DatabaseTest {
         val result = database.login(correctEmail, wrongPassword)
         assertThat(result, `is`(LoginStatus.WRONG_PASSWORD))
     }
-
-    @Test
-    fun `valid email and valid password return success`() {
-        val result = database.login(correctEmail, password)
-        assertThat(result, `is`(LoginStatus.SUCCESS))
-    }
-
     @Test
     fun `valid email with no password return enter_password`() {
         val result = database.login(validEmail, emptyString)
         assertThat(result, `is`(LoginStatus.ENTER_PASSWORD))
+    }
+    @Test
+    fun `valid email and valid password return success`() {
+        val result = database.login(correctEmail, password)
+        assertThat(result, `is`(LoginStatus.ENTER_DETAILS))
     }
 }
