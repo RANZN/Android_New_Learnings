@@ -1,3 +1,7 @@
+#https://proandroiddev.com/bitbucket-pipelines-android-6eeff631f2eb
+#https://blog.devgenius.io/android-ci-cd-using-bitbucket-pipeline-and-deploy-to-microsoft-app-center-d2a1074bfb67
+#https://bitbucket.org/blog/automate-and-scale-your-android-deployment-with-bitbucket-pipelines
+
 image: androidsdk/android-30
 
 pipelines:
