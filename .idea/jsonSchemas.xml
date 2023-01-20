@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JsonSchemaMappingsProjectConfiguration">
+    <state>
+      <map>
+        <entry key="datalogic-scan2deploy-android">
+          <value>
+            <SchemaInfo>
+              <option name="name" value="datalogic-scan2deploy-android" />
+              <option name="relativePathToSchema" value="https://json.schemastore.org/datalogic-scan2deploy-android.json" />
+              <option name="applicationDefined" value="true" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value="bitbucket-pipelines.yml" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
+      </map>
+    </state>
+  </component>
+</project>
