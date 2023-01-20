@@ -9,7 +9,7 @@ class Database {
 
     fun login(email: String?, password: String?): LoginStatus {
         val pattern: Regex =
-            Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE)
+            Pattern.compile("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,6}$")
                 .toRegex()
         return if (email.isNullOrBlank() && password.isNullOrBlank()) LoginStatus.ENTER_DETAILS
         else if (password.isNullOrBlank()) return LoginStatus.ENTER_PASSWORD

@@ -10,8 +10,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:windowSoftInputMode="adjustPan"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:windowSoftInputMode="adjustPan">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -61,5 +61,10 @@
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageView
+            android:id="@+id/img_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </ScrollView>
 </layout>

@@ -2,10 +2,15 @@ package dev.ranjan.androidnewlearnings
 
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputLayout
 import dev.ranjan.androidnewlearnings.LoginStatus.*
 import dev.ranjan.androidnewlearnings.databinding.ActivityMainBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -38,6 +43,20 @@ class MainActivity : AppCompatActivity() {
     private fun showError(body: String, vararg views: TextInputLayout) {
         views.forEach { view ->
             view.error = body
+        }
+    }
+
+    private var flag = false
+    override fun onBackPressed() {
+        if (!flag) {
+            flag = true
+            Toast.makeText(this, "Press again to exit", Toast.LENGTH_SHORT).show()
+            CoroutineScope(Dispatchers.IO).launch {
+                delay(2000)
+                flag = false
+            }
+        } else {
+            onBackPressedDispatcher.onBackPressed()
         }
     }
 
