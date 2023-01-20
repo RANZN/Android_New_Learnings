@@ -31,14 +31,4 @@ pipelines:
               - gradle
             script:
               - ./gradlew :app:testDebugUnitTest
-    branches:
-      pipeline:
-        - step:
-            name: Pipeline Lint
-            caches:
-              - gradle
-            script:
-              - ./gradlew lint
-            artifacts:
-              - app/build/reports/**
 
