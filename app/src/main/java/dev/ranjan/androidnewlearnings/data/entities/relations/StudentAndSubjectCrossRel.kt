@@ -2,8 +2,8 @@ package dev.ranjan.androidnewlearnings.data.entities.relations
 
 import androidx.room.Entity
 
-@Entity(primaryKeys = ["studentID", "subject"])
+@Entity(primaryKeys = ["studentID", "subjectName"])
 data class StudentAndSubjectCrossRel(
-    val studentID: String,
-    val subject: String
+    val studentID: Long,
+    val subjectName: String
 )
